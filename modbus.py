@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""
 ######################################################################
 
 Simple Modbus Sensor Polling Code
@@ -71,5 +72,3 @@ print("")
 # Piece of mind close out
 sensy_boi.serial.close()
 print("Ports Now Closed")
-
-
