@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 ######################################################################
 
@@ -13,12 +14,11 @@ Thanks For Watching!!!
 """
 
 import minimalmodbus # Don't forget to import the library!!
+mb_address = 1 # Modbus address of sensor
 
-mb_address = 9 # Modbus address of sensor
+sensy_boi = minimalmodbus.Instrument('/dev/ttyS0',mb_address)	# Make an "instrument" object called sensy_boi (port name, slave address (in decimal))
 
-sensy_boi = minimalmodbus.Instrument('/dev/ttyUSB0',mb_address)	# Make an "instrument" object called sensy_boi (port name, slave address (in decimal))
-
-sensy_boi.serial.baudrate = 9600				# BaudRate
+sensy_boi.serial.baudrate = 4800				# BaudRate
 sensy_boi.serial.bytesize = 8					# Number of data bits to be requested
 sensy_boi.serial.parity = minimalmodbus.serial.PARITY_NONE	# Parity Setting here is NONE but can be ODD or EVEN
 sensy_boi.serial.stopbits = 1					# Number of stop bits
@@ -41,14 +41,20 @@ print("Requesting Data From Sensor...")	# Makes it look cool....
 ## Arguments - (register address, number of decimals, function code, Is the value signed or unsigned) 
 ## Uncomment to run this to just get temperature data
 
-#single_data= sensy_boi.read_register(1, 1, 3, False) 
-#print (f"Single register data = {single_data}")
+single_data= sensy_boi.read_register(1, 1, 3, False) 
+me= type(single_data)
+print ({me})
+print (f"Temperature = {single_data}")
+single_data= sensy_boi.read_register(0, 1, 3, False) 
+print (f"Relative Humidity = {single_data}")
 
 # Get list of values from MULTIPLE registers 
 # Arguments - (register start address, number of registers to read, function code) 
 data =sensy_boi.read_registers(0, 2, 3) 
 
 print("")
+me= type(data)
+print ({me})
 print(f"Raw data is {data}") # Shows the raw data list for the lolz
 
 # Process the raw data by deviding by 10 to get the actual floating point values
@@ -66,4 +72,5 @@ print("")
 # Piece of mind close out
 sensy_boi.serial.close()
 print("Ports Now Closed")
+
 
